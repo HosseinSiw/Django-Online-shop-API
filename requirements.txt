@@ -12,3 +12,4 @@ sqlparse==0.5.3
 uritemplate==4.1.1
 pytest==8.3.5
 pytest-django==4.10.0
+pillow==11.1.0

@@ -22,7 +22,8 @@ from .swagger_schema import schema_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("users/", include('users.urls'), name='users')
+    path("users/", include('users.urls'), name='users'),
+    path("products/", include('products.urls'), name='products'),
 ]
 
 if settings.DEBUG:
