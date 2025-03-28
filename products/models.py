@@ -11,6 +11,8 @@ class Category(models.Model):
     """
     name = models.CharField(max_length=30, unique=True, blank=False, null=False)
     
+    def __str__(self):
+        return self.name
     
 class Product(models.Model):
     """
@@ -49,7 +51,7 @@ class ProductImage(models.Model):
     This model will represent the Images of each product.
     """
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='products/')
+    image = models.ImageField(upload_to='products/images/')
 
     def __str__(self):
         return f"Image for {self.product.name}"

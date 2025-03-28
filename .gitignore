@@ -1,3 +1,4 @@
 venv/
 .pytest_chach/
 .vscode/
+products/images/
