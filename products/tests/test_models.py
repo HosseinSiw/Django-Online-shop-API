@@ -1,4 +1,6 @@
 from django.test import TestCase
+from django.core.exceptions import ValidationError
+
 from decimal import Decimal
 from ..models import Category, Product, ProductImage
 
@@ -27,6 +29,7 @@ class ProductModelsTest(TestCase):
         name = 'test product'
         cat = Category.objects.create(name='sample')
         product = Product.objects.create(
+            name=name,
             price=Decimal('100.5'),
             stock=10,
             category=cat,
@@ -34,4 +37,14 @@ class ProductModelsTest(TestCase):
         self.assertEqual(product.get_category_name(), 'sample')
         self.assertEqual(str(product), product.name)
         
-    
+    def test_product_model_name_is_required(self):
+        with self.assertRaises(ValidationError):
+            cat = Category.objects.create(name='name')
+            p = Product.objects.create(
+            # name='',
+            price=Decimal('100.5'),
+            stock=10,
+            category=cat,
+            )
+            print("NAME:" ,p.name)
+            print("SLUG:", p.slug)

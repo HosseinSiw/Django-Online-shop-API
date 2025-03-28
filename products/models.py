@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 from decimal import Decimal
 from django.template.defaultfilters import slugify
 
@@ -15,7 +16,7 @@ class Product(models.Model):
     """
     The main Product Table.
     """
-    name = models.CharField(max_length=100, null=False, blank=False)
+    name = models.CharField(max_length=100, null=False, blank=False,)
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -30,6 +31,8 @@ class Product(models.Model):
         return f"{self.name}"
     
     def save(self, *args, **kwargs):
+        if not self.name or self.name == "":
+            raise ValidationError("Name is required")
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
