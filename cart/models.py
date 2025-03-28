@@ -17,7 +17,7 @@ class Cart(models.Model):
         return f"{self.user.username}'s Cart"
 
     @property
-    def total_price(self) -> Decimal:
+    def cart_total_price(self) -> Decimal:
         return sum(item.total_price for item in self.cart_items.all())
 
     @property
