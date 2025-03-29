@@ -70,14 +70,15 @@ class ClearCardView(APIView):
         return Response(
             data=data, status=status.HTTP_204_NO_CONTENT,
         )
+
         
 class CartDetailView(generics.RetrieveUpdateAPIView):
     """
-    This view offers Get and PUT and PATCH HTTP method, and it allows users to retrive and update their carts. 
+    This view offers Get and PUT and PATCH HTTP method, 
+    and it allows users to retrive and update their carts. 
     """
     serializer_class = CartSerializer
     permission_classes = [permissions.IsAuthenticated,]
-    
     
     def get_object(self):
         return Cart.objects.get(user=self.request.user)
