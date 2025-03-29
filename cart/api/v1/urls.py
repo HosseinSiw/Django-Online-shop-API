@@ -7,4 +7,5 @@ app_name = 'api-v1'
 urlpatterns = [
     path("add-to-cart/<int:product_id>/", V.AddToCartView.as_view(), name='add-to-cart'),
     path('clear-cart/', V.ClearCardView.as_view(), name='cart-clear'),
+    path('cart/', V.CartDetailView.as_view(), name='cart-details'),  
 ]

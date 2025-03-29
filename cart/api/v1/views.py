@@ -1,16 +1,19 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
-
-from products.models import Product
-from cart.models import Cart, CartItem
-from users.models import User
+from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework import permissions
-from .serializers import AddToCartSerializer
+
+from .serializers import AddToCartSerializer, CartSerializer
+from products.models import Product
+from cart.models import Cart, CartItem
 
 
 class AddToCartView(APIView):
+    """
+    This view offers adding to cart functionality for users.
+    """
     permission_classes = [permissions.IsAuthenticated,]
     serializer_class = AddToCartSerializer
     
@@ -52,6 +55,9 @@ class AddToCartView(APIView):
         
         
 class ClearCardView(APIView):
+    """
+    A simple view which allows users to destroy their cart items. 
+    """
     permission_classes = [permissions.IsAuthenticated,]
     
     def post(self, request, *args, **kwargs):
@@ -64,3 +70,14 @@ class ClearCardView(APIView):
         return Response(
             data=data, status=status.HTTP_204_NO_CONTENT,
         )
+        
+class CartDetailView(generics.RetrieveUpdateAPIView):
+    """
+    This view offers Get and PUT and PATCH HTTP method, and it allows users to retrive and update their carts. 
+    """
+    serializer_class = CartSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+    
+    
+    def get_object(self):
+        return Cart.objects.get(user=self.request.user)

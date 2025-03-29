@@ -15,10 +15,14 @@ class CartItemSerializer(serializers.ModelSerializer):
         
 
 class CartSerializer(serializers.ModelSerializer):
+    users_username = serializers.CharField(source='user.username', read_only=True)
+    users_email = serializers.CharField(source='user.email', read_only=True)
     cart_items = CartItemSerializer(many=True,)
+    
     class Meta:
         model = Cart
-        fields = ('cart_items', "user", "cart_total_price", "item_counts", "item_names", "cart_items")
+        fields = ('cart_items', "users_username", "users_email",
+                  "cart_total_price", "item_counts", "item_names", "cart_items")
         
         
 
