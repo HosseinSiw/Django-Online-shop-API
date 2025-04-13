@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'products.apps.ProductsConfig',
     "cart.apps.CartConfig",
     "payments.apps.PaymentsConfig",
+    "orders.apps.OrdersConfig",
+    
     "rest_framework",
     'drf_yasg',
     'rest_framework_simplejwt',
@@ -179,3 +181,10 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
+
+
+# Zarinpal Configs
+ZARINPAL_REQUEST_URL = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentRequest.json"
+ZARINPAL_VERIFY_URL = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"
+ZARINPAL_STARTPAY_URL = "https://sandbox.zarinpal.com/pg/StartPay/{authority}"
+MERCHANT_ID = 'XXXX-XXXX-XXXX-XXXX'
