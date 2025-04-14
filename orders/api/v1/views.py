@@ -5,19 +5,21 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Prefetch
 from rest_framework.filters import SearchFilter, OrderingFilter
+
 
 from payments.models import PaymentModel as Payment
 from cart.models import Cart
 from ...models import Order, OrderItem    
-from .serializers import OrderSerializer
+from .serializers import OrderCreateSerializer, OrderModelSerializer
 from .paginators import OrderPaginator
 
 
 
 class OrderCreateView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = OrderSerializer
+    serializer_class = OrderCreateSerializer
     
     def post(self, request):
         user = request.user
@@ -55,24 +57,23 @@ class OrderCreateView(generics.GenericAPIView):
                     
                 user_cart.clear_cart()
                 
-            data = {
-                "message": "Order Placed successfully",
-                "order_id": order.order_id,
-                "total_price": order.total_price,
-            }
-            return Response(data, status=status.HTTP_201_CREATED)
+            response_data = OrderModelSerializer(order, context={'request': request})
+            return Response(response_data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SetOrderAsPaid(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated,]
-    
+    """
+    This view is for debuging purposes.
+    """
     def post(self, request, order_id):
         if settings.DEBUG:
             order = Order.objects.get(order_id=order_id)
             order.payment.status = "S" # Success.
             order.order_status = "Pr"  # Processing.  
+            order.save()
             return Response({
                 'Order id': order_id,
                 "Status": order.order_status,
@@ -84,16 +85,21 @@ class SetOrderAsPaid(generics.GenericAPIView):
         
 class OrdersListByUser(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated,]
-    serializer_class = OrderSerializer
+    serializer_class = OrderModelSerializer
     pagination_class = OrderPaginator
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]    
     filterset_fields = ['order_status',]
     ordering_fields = ['order_date', 'total_amount']
     ordering = ['-order_date']
-    search_fileds = ['items__name', "total_amount", "order_status",]
+    search_fields = ['order_items__product__name', "total_amount", "order_status",]
     
     def get_queryset(self, *args, **kwargs):
-        orders = Order.objects.filter(user=self.request.user)
+        user = self.request.user
+        orders = Order.objects.filter(user=user)
+        
+        orders = orders.prefetch_related(
+            Prefetch('order_items', queryset=OrderItem.objects.select_related('product'))
+        )
         return orders
     
     
