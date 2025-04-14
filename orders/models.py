@@ -40,7 +40,7 @@ class Order(models.Model):
         max_digits=15,
         default=Decimal('0.01'), 
     )
-    payment = models.ForeignKey(Payment, on_delete=models.CASCADE, )
+    payment = models.ForeignKey(Payment, on_delete=models.CASCADE, related_name='order_payment')
     payment_status = models.CharField(max_length=1, choices=Payment.payment_status_choices, default='P')
     
     def __str__(self):
