@@ -43,7 +43,9 @@ class Order(models.Model):
     payment = models.ForeignKey(Payment, on_delete=models.CASCADE, )
     payment_status = models.CharField(max_length=1, choices=Payment.payment_status_choices, default='P')
     
-
+    def __str__(self):
+        msg = f'Order: {self.order_id} - Date: {self.order_date} - User: {self.user} - status: {self.order_status}'
+        return msg
 
 class OrderItem(models.Model):
     order = models.ForeignKey("Order", related_name="order_items", on_delete=models.CASCADE)

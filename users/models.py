@@ -1,9 +1,9 @@
 from django.db import models
 from .managers import CustomUserManager
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     # Personal Information
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=255, unique=True, null=False, blank=False)
@@ -24,3 +24,9 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.username + " " + self.email
+
+    def has_perm(self, perm, obj = ...):
+        return self.is_superuser
+    
+    def has_module_perms(self, app_label):
+        return self.has_module_perms
