@@ -27,14 +27,8 @@ class AddToCartView(APIView):
         serializer = self.serializer_class(data=data)
         
         if serializer.is_valid():
-            product = get_object_or_404(Product, pk=product_id)
-            
-            print("\n\n\nREQUEST BY:", request.user)
-            print("\nEMAIL ADDRESS:", request.user.email)
-            print(type(request.user))
-            
+            product = get_object_or_404(Product, pk=product_id)            
             user = request.user
-            print(user, '\n\n')
             cart, _ = Cart.objects.get_or_create(user=user)
             cart_item, _ = CartItem.objects.get_or_create(product=product, cart=cart)
             

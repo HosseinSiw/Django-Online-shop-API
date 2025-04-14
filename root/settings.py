@@ -57,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    'root.middlewares.dev_auto_auth.AutoAuthForDevMiddleware',  # Auto authentication middleware. 
 ]
 
 ROOT_URLCONF = 'root.urls'
@@ -188,3 +190,6 @@ ZARINPAL_REQUEST_URL = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentRequ
 ZARINPAL_VERIFY_URL = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"
 ZARINPAL_STARTPAY_URL = "https://sandbox.zarinpal.com/pg/StartPay/{authority}"
 MERCHANT_ID = 'XXXX-XXXX-XXXX-XXXX'
+
+# AUTO AUTH MIDDLEWARE
+DEV_AUTH = True
