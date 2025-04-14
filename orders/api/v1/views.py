@@ -1,12 +1,14 @@
 from rest_framework import generics
 from rest_framework import permissions
-from django.db import transaction
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.views import APIView
+
 from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Prefetch
-from rest_framework.filters import SearchFilter, OrderingFilter
+from django.db import transaction
 
 
 from payments.models import PaymentModel as Payment
@@ -14,7 +16,7 @@ from cart.models import Cart
 from ...models import Order, OrderItem    
 from .serializers import OrderCreateSerializer, OrderModelSerializer
 from .paginators import OrderPaginator
-
+from .permissions import IsOwnerOrReadOnly
 
 
 class OrderCreateView(generics.GenericAPIView):
@@ -103,4 +105,14 @@ class OrdersListByUser(generics.ListAPIView):
         return orders
     
     
+class OrderDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]  # My custom permission class.
+    serializer_class = OrderModelSerializer
     
+    def get(self, request, order_id):
+        order = Order.objects.get(order_id=order_id)
+        serializer = self.serializer_class(order, context={'request': request})
+        return Response(
+            data=serializer.data, status=status.HTTP_200_OK,
+        )
+        

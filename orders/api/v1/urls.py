@@ -7,7 +7,8 @@ from django.conf import settings
 app_name = 'v1'
 urlpatterns = [
     path('create-order/', V.OrderCreateView.as_view(), name='create_order'),
-    path("orders_list/", V.OrdersListByUser.as_view(), name='my_orders'),
+    path("orders/", V.OrdersListByUser.as_view(), name='orders_list'),
+    path("orders/<uuid:order_id>/", V.OrderDetailView.as_view(), name='order_details'),
 ]
 
 
