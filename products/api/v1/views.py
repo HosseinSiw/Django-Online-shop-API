@@ -1,12 +1,14 @@
 from ...models import Product
 from .serializers import ProductSerializer
 from .paginators import ProdcutPaginator
+from .throttles import ProductEndpointsThrottle
 
 from rest_framework.response import Response
 from rest_framework import status
 
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import permissions
+from rest_framework.exceptions import PermissionDenied
 
 
 class ProductListView(ListAPIView):
@@ -14,12 +16,27 @@ class ProductListView(ListAPIView):
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny,]
     pagination_class = ProdcutPaginator
+    throttle_classes = [ProductEndpointsThrottle,]
     
         
-class ProductDetailView(RetrieveAPIView):
+class ProductDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.filter(is_active=True)
     lookup_field = 'slug'
     serializer_class = ProductSerializer
-    permission_classes = [permissions.AllowAny,]
+    throttle_classes = [ProductEndpointsThrottle,]
+
+    def update(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return super().update(request, *args, **kwargs)
+        raise PermissionDenied(detail='Only super users can update products')
     
+    def get_permissions(self):
+        if self.request.method in ['PUT', "PATCH", 'DELETE']:
+            return [permissions.IsAdminUser()]
+        return [permissions.AllowAny()]
+    
+    def destroy(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return super().destroy(request, *args, **kwargs)
+        raise PermissionDenied(detail='You dont have perm to delete a product')
     

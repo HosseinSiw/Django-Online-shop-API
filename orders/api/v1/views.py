@@ -13,15 +13,18 @@ from django.db import transaction
 
 from payments.models import PaymentModel as Payment
 from cart.models import Cart
+
 from ...models import Order, OrderItem    
 from .serializers import OrderCreateSerializer, OrderModelSerializer
 from .paginators import OrderPaginator
 from .permissions import IsOwnerOrReadOnly
+from .throttles import OrderEndpointsCustomThrottle, OrderCreationThrottle
 
 
 class OrderCreateView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = OrderCreateSerializer
+    throttle_classes = [OrderCreationThrottle,]
     
     def post(self, request):
         user = request.user
@@ -89,6 +92,7 @@ class OrdersListByUser(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated,]
     serializer_class = OrderModelSerializer
     pagination_class = OrderPaginator
+    throttle_classes = [OrderEndpointsCustomThrottle,]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]    
     filterset_fields = ['order_status',]
     ordering_fields = ['order_date', 'total_amount']
@@ -108,7 +112,7 @@ class OrdersListByUser(generics.ListAPIView):
 class OrderDetailView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]  # My custom permission class.
     serializer_class = OrderModelSerializer
-    
+    throttle_classes = [OrderEndpointsCustomThrottle,]
     def get(self, request, order_id):
         order = Order.objects.get(order_id=order_id)
         serializer = self.serializer_class(order, context={'request': request})
