@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import User
+from .models import User, Profile
+
 
 class UserAdmin(admin.ModelAdmin):
     search_fields = ('username', 'email', "is_verified", 'is_staff', 'is_superuser')
@@ -19,3 +20,4 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(Profile)

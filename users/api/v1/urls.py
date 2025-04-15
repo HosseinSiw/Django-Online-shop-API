@@ -15,4 +15,6 @@ urlpatterns = [
     path('jwt/refresh/', TokenRefreshView.as_view(), name='jwt_refresh'),
     path('jwt/verify/', TokenVerifyView.as_view(), name='jwt_verify'),
     
+    # Profile related endpoints
+    path('profile/', views.ProfileView.as_view(), name='profile'),
 ]

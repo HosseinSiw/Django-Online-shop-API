@@ -1,6 +1,8 @@
 from django.db import models
 from .managers import CustomUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -30,3 +32,22 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def has_module_perms(self, app_label):
         return self.has_module_perms
+    
+
+class Profile(models.Model):
+    """
+    The Profile table. (model)
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile_owner')
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    profile_pic = models.ImageField(upload_to='users/profile_pics')
+    description = models.CharField(max_length=256)
+    
+    def __str__(self):
+        msg = f'{self.user.username} - Profile'
+        return msg
+    
+    def get_full_name(self):
+        return f'{self.first_name} {self.last_name}'
+

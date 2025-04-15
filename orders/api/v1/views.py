@@ -68,7 +68,7 @@ class OrderCreateView(generics.GenericAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SetOrderAsPaid(generics.GenericAPIView):
+class SetOrderAsPaid(APIView):
     permission_classes = [permissions.IsAuthenticated,]
     """
     This view is for debuging purposes.
