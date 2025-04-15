@@ -46,7 +46,7 @@ class UserLoginSerializer(TokenObtainPairSerializer):
     
     
 class ProfileSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(source='user.email')
+    email = serializers.EmailField(source='user.email', read_only=True)
     class Meta:
         model = Profile
         fields = ('profile_pic', "id", "first_name", "last_name", "description", "email")

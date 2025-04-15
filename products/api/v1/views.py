@@ -3,14 +3,14 @@ from .serializers import ProductSerializer
 from .paginators import ProdcutPaginator
 from .throttles import ProductEndpointsThrottle
 
-from rest_framework.response import Response
-from rest_framework import status
-
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import permissions
 from rest_framework.exceptions import PermissionDenied
 
 
+@method_decorator(cache_page(60 * 10), name='get')
 class ProductListView(ListAPIView):
     queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer

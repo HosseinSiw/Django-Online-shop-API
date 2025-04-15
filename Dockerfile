@@ -1,7 +1,6 @@
 FROM python:3.12
 
 ENV PYTHONDONTWRITEBYCODE=1
-# ENV key=value
 
 WORKDIR /app
 

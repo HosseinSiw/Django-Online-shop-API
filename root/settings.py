@@ -201,3 +201,14 @@ MERCHANT_ID = 'XXXX-XXXX-XXXX-XXXX'
 
 # AUTO AUTH MIDDLEWARE
 DEV_AUTH = True
+
+# Redis configuration
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}

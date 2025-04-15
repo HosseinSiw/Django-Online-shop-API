@@ -3,25 +3,24 @@ version: '3.8'
 services:
   backend:
     build: .
-    container_name: backend
+    container_name: django
     volumes:
       - .:/app
     ports:
       - "8000:8000"
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: gunicorn --bind 0.0.0.0:8000 --workers 4 root.wsgi
 
 
-  # Load testing services 
-  # master:
-  #   image: locustio/locust
-  #   ports:
-  #     - "8089:8089"
-  #   volumes:
-  #     - ./locust:/mnt/locust
-  #   command: locust -f /mnt/locust/locust_file.py --master -user LocustUser
-
-  # worker:
-  #   image: locustio/locust
-  #   volumes:
-  #     - ./locust:/mnt/locust
-  #   command: locust -f /mnt/locust/locust_file.py --worker --master-host=master
+  redis:
+    image: redis:latest
+    restart: unless-stop
+    ports:
+      - "6379:6379"
+    
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    ports:
+      - "8001:8001" 
+    depends_on:
+      - redis
