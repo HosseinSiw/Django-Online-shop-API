@@ -8,12 +8,12 @@ services:
       - .:/app
     ports:
       - "8000:8000"
-    command: gunicorn --bind 0.0.0.0:8000 --workers 4 root.wsgi
+    command: python manage.py runserver 0.0.0.0:8000
 
 
   redis:
     image: redis:latest
-    restart: unless-stop
+    restart: unless-stopped
     ports:
       - "6379:6379"
     
@@ -24,3 +24,19 @@ services:
       - "8001:8001" 
     depends_on:
       - redis
+
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+     - '5000:80'
+     - '25:25'
+     - '143:143'
+    volumes:
+     - smtp4dev-data:/smtp4dev
+    environment:
+     - ServerOptions__Urls=https://*:80
+     - ServerOptions__HostName=smtp4dev
+    
+volumes:
+  smtp4dev-data:

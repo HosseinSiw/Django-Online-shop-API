@@ -15,4 +15,3 @@ class AutoAuthForDevMiddleware(MiddlewareMixin):
                 request.user = user
             except user.DoesNotExist:
                 pass
-            

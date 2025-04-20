@@ -3,6 +3,9 @@ from .managers import CustomUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from datetime import timedelta
+from django.utils import timezone
+from django.conf import settings
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -51,3 +54,14 @@ class Profile(models.Model):
     def get_full_name(self):
         return f'{self.first_name} {self.last_name}'
 
+
+class LoginCode(models.Model):
+    email = models.EmailField(null=False, blank=False)
+    code = models.CharField(max_length=6,)
+    is_used = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    
+    def validate_code(self):
+        return self.created_at + timedelta(settings.LOGIN_CODE_LIFECYCLE) >= timezone.now()
+    

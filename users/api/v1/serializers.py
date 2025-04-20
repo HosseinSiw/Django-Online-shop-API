@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from ...models import User, Profile
+from ...models import User, Profile, LoginCode
 
 
 class UserCreationSerializer(serializers.ModelSerializer):
@@ -36,15 +36,23 @@ class UserCreationSerializer(serializers.ModelSerializer):
     
     
     
-class UserLoginSerializer(TokenObtainPairSerializer):
+# class UserLoginSerializer(TokenObtainPairSerializer):
     
-    def validate(self, attrs):
-        validated_data = super().validate(attrs)
-        validated_data['email'] = self.user.email
-        validated_data['user'] = self.user.username 
-        return validated_data
+#     def validate(self, attrs):
+#         validated_data = super().validate(attrs)
+#         validated_data['email'] = self.user.email
+#         validated_data['user'] = self.user.username 
+#         return validated_data
+    
+class UserLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
     
     
+class UserVerifySerializer(serializers.Serializer):
+    code = serializers.CharField(max_length=6)
+    
+
 class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', read_only=True)
     class Meta:
