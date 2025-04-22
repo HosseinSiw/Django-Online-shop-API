@@ -9,10 +9,10 @@ This API facilitates the management of products, users, carts, orders, and payme
   ![Swagger UI](Screenshots/swagger-ui.png)
 
 - **Cart, Payments, Orders Endpoints**  
-  ![Cart, Payments, Orders](screenshots/cart-orders-payments.png)
+  ![Cart, Payments, Orders](Screenshots/cart-orders-payments.png)
 
 - **Products and Users Endpoints**  
-  ![Products and Users](screenshots/Products-and-users.png)
+  ![Products and Users](Screenshots/Products-and-users.png)
 
 ---
 
