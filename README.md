@@ -113,6 +113,7 @@ This API facilitates the management of products, users, carts, orders, and payme
     GET  payments/api-v2/order-payment-verify/ – Verify a payment.
 
 ### 📂 Project Structure
+```bash
 ├── cart/               # Cart management
 ├── orders/             # Order processing
 ├── payments/           # Payment handling
@@ -125,11 +126,11 @@ This API facilitates the management of products, users, carts, orders, and payme
 ├── docker-compose.yml
 ├── requirements.txt
 └── manage.py
-
+```
 
 ### 📧 Contact
 
-Created and maintained by HosseinSiw
+Created and maintained by [HosseinSiw](https://github.com/HosseinSiw/)
 Feel free to open issues or submit pull requests!
 
 
