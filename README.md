@@ -5,16 +5,14 @@ This API facilitates the management of products, users, carts, orders, and payme
 
 ## 📸 Screenshots
 
-> _Replace the image paths below with your actual screenshot paths inside the repo (e.g. `screenshots/swagger-ui.png`)_
-
 - **Swagger UI Overview**  
-  ![Swagger UI](screenshots/swagger-ui.png)
+  ![Swagger UI](Screenshots/swagger-ui.png)
 
 - **Cart, Payments, Orders Endpoints**  
-  ![Cart, Payments, Orders](screenshots/cart-payments-orders.png)
+  ![Cart, Payments, Orders](screenshots/cart-orders-payments.png)
 
 - **Products and Users Endpoints**  
-  ![Products and Users](screenshots/products-users.png)
+  ![Products and Users](screenshots/Products-and-users.png)
 
 ---
 
