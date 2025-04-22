@@ -1,6 +1,5 @@
 venv/
-.pytest_chach/
+.pytest_cache/
 .vscode/
 products/images/
-
-utils.txt
+.env
